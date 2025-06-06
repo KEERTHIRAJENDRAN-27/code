@@ -1,76 +1,54 @@
-update this code if i click update means update the doctor details
+update this code for showing doctor details in profile section and also if once they register the details show button into update
+app-header></app-header>
+
 <body>
-  <div class="container">
-    <div class="form-box">
-      <h2>Doctor Schedule Form</h2>
-      <form #saveDoctor="ngForm" (ngSubmit)="save(saveDoctor)">
-        <label for="doctorName">Doctor Name</label>
-        <input type="text" id="doctorName" name="doctorName" ngModel required>
-
-        <label for="specialization">Specialization</label>
-        <input type="text" id="specialization" name="specialization" ngModel required>
-
-        <label for="gender">Gender</label>
-        <select id="gender" name="gender" ngModel required>
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-
-        <label>Available Days</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Monday"> Monday</label>
-          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Tuesday"> Tuesday</label>
-          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Wednesday"> Wednesday</label>
-          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Thursday"> Thursday</label>
-          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Friday"> Friday</label>
-          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Saturday"> Saturday</label>
-          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Sunday"> Sunday</label>
-        </div>
-
-        <label>Available Times</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="08:00"> 08:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="08:30"> 08:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="09:00"> 09:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="09:30"> 09:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="10:00"> 10:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="10:30"> 10:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="11:00"> 11:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="11:30"> 11:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="12:00"> 12:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="12:30"> 12:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="14:00"> 14:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="14:30"> 14:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="15:00"> 15:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="15:30"> 15:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="16:00"> 16:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="16:30"> 16:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="17:00"> 17:00</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="17:30"> 17:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="18:30"> 18:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="19:30"> 19:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="20:30"> 20:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="21:30"> 21:30</label>
-          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="22:00"> 22:00</label>
-          
-        </div>
-
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" ngModel required>
-
-        <label for="contact">Contact Number</label>
-        <input type="text" id="contact" name="contact" ngModel required>
-
-        <label for="experience">Experience (Years)</label>
-        <input type="number" id="experience" name="experience" ngModel min="0" required>
-
-        <button type="submit">update</button>
-<button type="submit">delete</button>
-      </form>
+  <section class="profile-section" *ngIf="doctor">
+    <div class="profile-image">
+      <img src="./assets/doctorProfile.png" alt="Doctor Profile">
     </div>
-  </div>
+    <div class="profile-details">
+      <h2>{{ doctor?.doctorName }}</h2>
+      <p><span class="label">ID:</span> {{ doctor?.doctorId }}</p>
+      <p><span class="label">Specialty:</span> {{ doctor?.specialization }}</p>
+      <p><span class="label">Experience:</span> {{ doctor?.experience }} years</p>
+      <p><span class="label">Gender:</span> {{ doctor?.gender }}</p>
+      <p><span class="label">Days Available:</span> {{ doctor?.availableDays }}</p>
+      <p><span class="label">Consultation Time:</span> {{ doctor?.availableTime }}</p>
+      <p><span class="label">Email:</span> {{ doctor?.email }}</p>
+      <p><span class="label">Contact:</span> {{ doctor?.contact }}</p>
+    </div>
+  </section>
+
+  <main class="dashboard">
+    <div class="card">
+      <h1>📝</h1>
+      <h2>Update Profile</h2>
+      <button *ngIf="doctor; else registerBtn" routerLink="/doctorProfileUpdate">
+        Update Info
+      </button>
+      <ng-template #registerBtn>
+        <button routerLink="/doctorRegister">Register Info</button>
+      </ng-template>
+    </div>
+
+    <div class="card">
+      <h1>📂</h1>
+      <h2>View Records</h2>
+      <button routerLink="/viewRecords">Patient History</button>
+    </div>
+
+    <div class="card">
+      <h1>📑</h1>
+      <h2>Appointment Details</h2>
+      <button routerLink="/patientBooking">View Appointments</button>
+    </div>
+
+    <div class="card">
+      <h1>🔔</h1>
+      <h2>Check Alerts</h2>
+      <button routerLink="/doctorN">View Mail</button>
+    </div>
+  </main>
 </body>
 
 --------------------------------------------------
@@ -85,10 +63,7 @@ import { Observable } from 'rxjs';
 })
 export class DoctorService {
   private paths = "http://localhost:8012/doctor/add";
-  private paths1 = "http://localhost:8012/doctor/update/{doctorId}";
-  private paths2 = "http://localhost:8012/doctor/delete/{doctorId}";
-  private paths3 = "http://localhost:8012/doctor/fetch/{doctorId}";
-  private paths4 = "http://localhost:8012/doctor/fetchAll";
+  private baseUrl = "http://localhost:8012/doctor";
 
   constructor(private http: HttpClient) { }
 
@@ -97,6 +72,23 @@ export class DoctorService {
     return this.http.post(this.paths, saveDoc, { responseType: 'text' });
   }
 
+  public update(doctorId: number, doctor: Doctor): Observable<string> {
+    return this.http.put(`${this.baseUrl}/update/${doctorId}`, doctor, { responseType: 'text' });
+  }
+  
+  public delete(doctorId: number): Observable<string> {
+    return this.http.delete(`${this.baseUrl}/delete/${doctorId}`, { responseType: 'text' });
+  }
+  
+
+  public fetchById(doctorId: number): Observable<Doctor> {
+    const url = `${this.baseUrl}/fetch/${doctorId}`;
+    return this.http.get<Doctor>(url);
+  }
+
+  public fetchAll(): Observable<Doctor[]> {
+    return this.http.get<Doctor[]>(`${this.baseUrl}/fetchAll`);
+  }
 }
 
 export class Doctor {
@@ -127,17 +119,195 @@ export class Doctor {
 --------------------------------------
 component code
 
-import { Component } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { HeaderComponent } from '../header/header.component';
 import { Doctor, DoctorService } from '../doctor.service';
 
 @Component({
-  selector: 'app-doctor-update',
-  imports: [RouterLink,FormsModule],
-  templateUrl: './doctor-update.component.html',
-  styleUrl: './doctor-update.component.css'
+  selector: 'app-doctor',
+  imports: [RouterLink,HeaderComponent],
+  templateUrl: './doctor.component.html',
+  styleUrl: './doctor.component.css'
 })
-export class DoctorUpdateComponent {
-    
+export class DoctorComponent implements OnInit{
+  doctors: Doctor[] = [];
+  doctor?: Doctor;
+
+  constructor(private router: Router, private doctorService: DoctorService) {}
+
+  ngOnInit(): void {
+    this.loadAllDoctors();
   }
+
+  loadAllDoctors(): void {
+    const userIdStr = localStorage.getItem("userId"); // Assuming doctorId is stored as userId
+    const userId = userIdStr ? parseInt(userIdStr, 10) : null;
+
+    this.doctorService.fetchAll().subscribe({
+      next: (data: Doctor[]) => {
+        this.doctors = data;
+
+        if (userId !== null) {
+          this.doctor = data.find(d => d.doctorId === userId);
+        }
+
+        console.log('Fetched all doctors:', data);
+        console.log('Logged in doctor:', this.doctor);
+      },
+      error: (err) => {
+        console.error('Error fetching doctors:', err);
+      }
+    });
+  }
+}
+------------------------------------
+css code 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  padding-top: 50px;
+  min-height: 100vh;
+  color: #140e0e;
+  /* background:rgba(202, 202, 202, 0.6); */
+  background-image: url('https://t3.ftcdn.net/jpg/03/11/86/42/360_F_311864233_WrzVI9w22XmJF2Hul4YQQCnCyBa5IeUe.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; 
+  background-attachment: fixed; 
+}
+
+.profile-section {
+  background-color: rgba(225, 219, 219, 0.92);
+  padding: 30px;
+  display: flex;
+  flex-direction: row-reverse; /* This puts the image on the right */
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  margin: 40px auto;
+  width: 85%;
+  max-width: 900px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.profile-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 14px;
+}
+
+.profile-image img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1d3557;
+}
+
+
+.profile-details {
+  font-size: 17px;
+  padding: 10px 30px;
+  flex: 1;
+  min-width: 260px;
+  text-align: left;
+}
+
+.profile-details h2 {
+  font-size: 25px;
+  font-weight: bold;
+  color: #042046;
+  margin-bottom: 20px;
+}
+
+.profile-details p {
+  font-size: 18px;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.label {
+  font-weight: bold;
+  color: #457b9d;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #e63946;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 60px; /* Reduced spacing */
+  padding: 0px; /* Optimized padding */
+  max-width: 85%;
+  margin: 0 auto;
+}
+
+.card {
+  background-color:  rgba(225, 219, 219, 0.92);
+  border-radius: 10px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+  min-height: auto; /* Optimized height */
+  margin-bottom: 10px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h1 {
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.card h2 {
+  font-size: 17px;
+  color: #1d3557;
+  margin-bottom: 10px;
+}
+
+.card button {
+  background-color: #39647e;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+  background-color: #1d3557;
+}
+
+/* Responsive Fix */
+@media (max-width: 768px) {
+  .profile-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-details {
+    text-align: center;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+    width: 90%;
+  }
+}
