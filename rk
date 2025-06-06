@@ -1,0 +1,184 @@
+correct the code for showing the patient details profile section i have correct css cpode so dont change class name
+<app-header></app-header>
+
+<body>
+  <section class="profile-section">
+    <div class="profile-image">
+      <img src="./assets/userProfile.png" alt="Patient Profile">
+    </div>
+    <div class="profile-details">
+      <h2>{{ patient.name }}</h2>
+      <p><span class="label">Age:</span> {{ patient.age }}</p>
+      <p><span class="label">Blood Group:</span> {{ patient.bloodGroup }}</p>
+      <p><span class="label">Gender:</span> {{ patient.gender }}</p>
+      <p><span class="label">Date of Birth:</span> {{ patient.dateOfBirth }}</p>
+      <p><span class="label">Medical History:</span> {{ patient.medicalHistory }}</p>
+      <p><span class="label">Email:</span> {{ patient.email }}</p>
+      <p><span class="label">Contact:</span> {{ patient.contactDetails }}</p>
+    </div>
+  </section>
+
+  <main class="dashboard">
+    <div class="card">
+      <h1>📝</h1>
+      <h2>Update Profile</h2>
+      <button routerLink="/patientRegister">Edit Info</button>
+    </div>
+
+    <div class="card">
+      <h1>📆</h1>
+      <h2>Book Appointment</h2>
+      <button routerLink="/bookAppointment">Book Now</button>
+    </div>
+
+    <div class="card">
+      <h1>📑</h1>
+      <h2>Appointment Details</h2>
+      <button routerLink="/patientBooking">View Appointments</button>
+    </div>
+    
+    <div class="card">
+      <h1>🔔</h1>
+      <h2>Check Alerts</h2>
+      <button routerLink="/patientN">See Alerts</button>
+    </div>
+  </main>
+</body>
+------------------------------------------------------------------------------------
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { HeaderComponent } from '../header/header.component';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Patient, PatientService } from '../patient.service';
+
+@Component({
+  selector: 'app-patient',
+  imports: [RouterLink,HeaderComponent,NgIf,FormsModule,NgFor],
+  templateUrl: './patient.component.html',
+  styleUrl: './patient.component.css'
+})
+
+export class PatientComponent implements OnInit {
+  patients: Patient[] = [];
+  patient?: Patient; // single patient to display
+
+  constructor(private router: Router, private patientService: PatientService) {}
+
+  ngOnInit(): void {
+    this.loadAllPatients();
+  }
+
+  loadAllPatients(): void {
+    this.patientService.fetchAll().subscribe({
+      next: (data: Patient[]) => {
+        this.patients = data;
+        this.patient = data[0]; // display the first patient
+        console.log('Fetched all patients:', data);
+      },
+      error: (err) => {
+        console.error('Error fetching patients:', err);
+      }
+    });
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+}
+--------------------------------------------------------------
+this correct working save so dont change that
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PatientService {
+  paths="http://localhost:8001/patients/register"
+  paths1="http://localhost:8001/patients/update/{patientId}"
+  paths2="http://localhost:8001/patients/delete/{patientId}"
+  paths3="http://localhost:8001/patients/fetchById/{patientId}"
+  paths4="http://localhost:8001/patients/fetchAll"
+
+
+  constructor(private client:HttpClient) { }
+
+  public save(savePat:Patient):Observable<string>{
+    console.log(savePat)
+    return this.client.post(this.paths,savePat,{responseType:'text'})
+  }
+
+  public update(updatePat:CPatient):Observable<string>{
+    console.log(updatePat)
+    return this.client.put(this.paths1,updatePat,{responseType:'text'})
+  }
+
+  // public delete(deletePat:CPatient):Observable<string>{
+  //   console.log(deletePat)
+  //   return this.client.delete(this.paths2,deletePat,{responseType:'text'})
+  // }
+
+  public fetchById(fetchByIdPat:CPatient):Observable<string>{
+    console.log(fetchByIdPat)
+    return this.client.get(this.paths3,fetchByIdPat,{responseType:'text'})
+  }
+
+  public fetchAll(fetchAllPat:CPatient):Observable<string>{
+    console.log(fetchAllPat)
+    return this.client.get(this.paths4,fetchAllPat,{responseType:'text'})
+  }
+    
+}
+
+
+export class Patient{
+  patientId:number;
+  name:string;
+  age:number;
+  bloodGroup:string;
+  gender:string;
+  dateOfBirth:Date;
+  medicalHistory:string;
+  email:string;
+  contactDetails:string;
+
+  constructor(patientId:number , name:string, age:number,bloodGroup:string,gender:string,dateOfBirth:Date,medicalHistory:string,email:string,contactDetails:string){
+    this.patientId=patientId
+    this.name=name
+    this.age=age
+    this.bloodGroup=bloodGroup
+    this.gender=gender
+    this.dateOfBirth=dateOfBirth
+    this.medicalHistory=medicalHistory
+    this.email=email
+    this.contactDetails=contactDetails
+
+  }
+}
+
+
+export class CPatient{
+  patientId:number;
+  name:string;
+  age:number;
+  bloodGroup:string;
+  gender:string;
+  dateOfBirth:Date;
+  medicalHistory:string;
+  email:string;
+  contactDetails:string;
+
+  constructor(name:string, age:number,bloodGroup:string,gender:string,dateOfBirth:Date,medicalHistory:string,email:string,contactDetails:string){
+    this.name=name
+    this.age=age
+    this.bloodGroup=bloodGroup
+    this.gender=gender
+    this.dateOfBirth=dateOfBirth
+    this.medicalHistory=medicalHistory
+    this.email=email
+    this.contactDetails=contactDetails
+
+  }
+}
