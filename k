@@ -1,44 +1,78 @@
-update this code if i click update means update the patient details
+update this code if i click update means update the doctor details
 <body>
-    <div class="container">
-      <h1>Update your Profile</h1>
-      <form #updatePatient="ngForm" (ngSubmit)="update(updatePatient)">
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Enter your name" ngModel name="name" required />
-   
-        <label for="age">Age:</label>
-        <input type="number" id="age" placeholder="Enter your age"  ngModel name="age" required />
-   
-        <label for="bloodGroup">Blood Group:</label>
-        <input type="text" id="bloodGroup" placeholder="e.g. A+, B-, O+" ngModel name="bloodGroup" required />
-   
-        <label for="gender" >Gender:</label>
-        <select id="gender" ngModel name="gender" required>
-          <option value="">Select gender</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Other</option>
+  <div class="container">
+    <div class="form-box">
+      <h2>Doctor Schedule Form</h2>
+      <form #saveDoctor="ngForm" (ngSubmit)="save(saveDoctor)">
+        <label for="doctorName">Doctor Name</label>
+        <input type="text" id="doctorName" name="doctorName" ngModel required>
+
+        <label for="specialization">Specialization</label>
+        <input type="text" id="specialization" name="specialization" ngModel required>
+
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" ngModel required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
         </select>
-   
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" value="1988-12-27" ngModel name="dateOfBirth"  required />
-   
-        <label for="medicalHistory">Medical History:</label>
-        <textarea id="medicalHistory" rows="4" placeholder="Enter any relevant history" ngModel name="medicalHistory" ></textarea>
-   
-        <label for="email">Email:</label>
-        <input type="email" id="email" placeholder="Enter your email" ngModel name="email"  required />
-   
-        <label for="contactDetails">Contact Details:</label>
-        <input type="text" id="contactDetails" placeholder="Phone number or address" ngModel name="contactDetails" required />
-   
-        <div class="buttons">
-          <button type="submit">Update Details</button>
-          <button type="reset" class="delete-btn">Delete Profile</button>
+
+        <label>Available Days</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Monday"> Monday</label>
+          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Tuesday"> Tuesday</label>
+          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Wednesday"> Wednesday</label>
+          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Thursday"> Thursday</label>
+          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Friday"> Friday</label>
+          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Saturday"> Saturday</label>
+          <label><input type="checkbox" name="availableDays" ngModel (change)="updateDays($event)" value="Sunday"> Sunday</label>
         </div>
+
+        <label>Available Times</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="08:00"> 08:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="08:30"> 08:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="09:00"> 09:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="09:30"> 09:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="10:00"> 10:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="10:30"> 10:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="11:00"> 11:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="11:30"> 11:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="12:00"> 12:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="12:30"> 12:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="14:00"> 14:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="14:30"> 14:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="15:00"> 15:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="15:30"> 15:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="16:00"> 16:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="16:30"> 16:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="17:00"> 17:00</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="17:30"> 17:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="18:30"> 18:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="19:30"> 19:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="20:30"> 20:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="21:30"> 21:30</label>
+          <label><input type="checkbox" name="availableTime" ngModel (change)="updateTimes($event)" value="22:00"> 22:00</label>
+          
+        </div>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" ngModel required>
+
+        <label for="contact">Contact Number</label>
+        <input type="text" id="contact" name="contact" ngModel required>
+
+        <label for="experience">Experience (Years)</label>
+        <input type="number" id="experience" name="experience" ngModel min="0" required>
+
+        <button type="submit">update</button>
+<button type="submit">delete</button>
       </form>
     </div>
-  </body>
+  </div>
+</body>
+
 --------------------------------------------------
 service code 
 
@@ -49,117 +83,61 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
-  paths="http://localhost:8001/patients/register"
-  paths1="http://localhost:8001/patients/update/{patientId}"
-  paths2="http://localhost:8001/patients/delete/{patientId}"
-  paths3="http://localhost:8001/patients/fetchById/{patientId}"
-  paths4="http://localhost:8001/patients/fetchAll"
+export class DoctorService {
+  private paths = "http://localhost:8012/doctor/add";
+  private paths1 = "http://localhost:8012/doctor/update/{doctorId}";
+  private paths2 = "http://localhost:8012/doctor/delete/{doctorId}";
+  private paths3 = "http://localhost:8012/doctor/fetch/{doctorId}";
+  private paths4 = "http://localhost:8012/doctor/fetchAll";
 
+  constructor(private http: HttpClient) { }
 
-  constructor(private client:HttpClient) { }
-
-  public save(savePat:Patient):Observable<string>{
-    console.log(savePat)
-    return this.client.post(this.paths,savePat,{responseType:'text'})
+  public save(saveDoc: Doctor): Observable<string> {
+    console.log(saveDoc);
+    return this.http.post(this.paths, saveDoc, { responseType: 'text' });
   }
 
-  public update(updatePat:CPatient):Observable<string>{
-    console.log(updatePat)
-    return this.client.put(this.paths1,updatePat,{responseType:'text'})
-  }
-
-  public delete(deletePat:CPatient):Observable<string>{
-    console.log(deletePat)
-    return this.client.delete(this.paths2,deletePat,{responseType:'text'})
-  }
-
-  public fetchById(fetchByIdPat:number):Observable<string>{
-    console.log(fetchByIdPat)
-    return this.client.get(this.paths3+"/"+fetchByIdPat,{responseType:'text'})
-  }
-
-  public fetchAll():Observable<Patient[]>{
-    console.log()
-    return this.client.get<Patient[]>(this.paths4);
-  }
-    
 }
 
+export class Doctor {
+  doctorId: number;
+  doctorName: string;
+  specialization: string;
+  gender: string;
+  availableDays: string;
+  availableTime: string;
+  email: string;
+  contact: string;
+  experience: number;
 
-export class Patient{
-  patientId:number;
-  name:string;
-  age:number;
-  bloodGroup:string;
-  gender:string;
-  dateOfBirth:Date;
-  medicalHistory:string;
-  email:string;
-  contactDetails:string;
-
-  constructor(patientId:number , name:string, age:number,bloodGroup:string,gender:string,dateOfBirth:Date,medicalHistory:string,email:string,contactDetails:string){
-    this.patientId=patientId
-    this.name=name
-    this.age=age
-    this.bloodGroup=bloodGroup
-    this.gender=gender
-    this.dateOfBirth=dateOfBirth
-    this.medicalHistory=medicalHistory
-    this.email=email
-    this.contactDetails=contactDetails
-
+  constructor(doctorId: number, doctorName: string, specialization: string, gender: string, availableDays: string,
+    availableTime: string, email: string, contact: string, experience: number) {
+    this.doctorId = doctorId;
+    this.doctorName = doctorName;
+    this.specialization = specialization;
+    this.gender = gender;
+    this.availableDays = availableDays;
+    this.availableTime = availableTime;
+    this.email = email;
+    this.contact = contact;
+    this.experience = experience;
   }
 }
 
-
-export class CPatient{
-  patientId:number;
-  name:string;
-  age:number;
-  bloodGroup:string;
-  gender:string;
-  dateOfBirth:Date;
-  medicalHistory:string;
-  email:string;
-  contactDetails:string;
-
-  constructor(name:string, age:number,bloodGroup:string,gender:string,dateOfBirth:Date,medicalHistory:string,email:string,contactDetails:string){
-    this.name=name
-    this.age=age
-    this.bloodGroup=bloodGroup
-    this.gender=gender
-    this.dateOfBirth=dateOfBirth
-    this.medicalHistory=medicalHistory
-    this.email=email
-    this.contactDetails=contactDetails
-
-  }
-}
 --------------------------------------
 component code
 
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { PatientService } from '../patient.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Doctor, DoctorService } from '../doctor.service';
 
 @Component({
-  selector: 'patientUpdate',
-  imports: [RouterLink, FormsModule],
-  templateUrl: './patient-update.component.html',
-  styleUrl: './patient-update.component.css'
+  selector: 'app-doctor-update',
+  imports: [RouterLink,FormsModule],
+  templateUrl: './doctor-update.component.html',
+  styleUrl: './doctor-update.component.css'
 })
-export class PatientUpdateComponent {
-  constructor(private patientService: PatientService, private router: Router) { }
-  update(form: NgForm) {
-    this.patientService.update(form.value).subscribe(response => console.log(response))
-    alert("Patient Updated Succesfully")
-    this.router.navigate(['patient'])
+export class DoctorUpdateComponent {
+    
   }
-  delete(form: NgForm) {
-    this.patientService.delete(form.value).subscribe(response => console.log(response))
-    alert("Patient Deleted Succesfully")
-    this.router.navigate(['patient'])
-  }
-}
