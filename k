@@ -1,5 +1,47 @@
-update this code show details of patient in profile give working code 
-dont change save its working change other for getting details
+update this code if i click update means update the patient details
+<body>
+    <div class="container">
+      <h1>Update your Profile</h1>
+      <form #updatePatient="ngForm" (ngSubmit)="update(updatePatient)">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter your name" ngModel name="name" required />
+   
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age"  ngModel name="age" required />
+   
+        <label for="bloodGroup">Blood Group:</label>
+        <input type="text" id="bloodGroup" placeholder="e.g. A+, B-, O+" ngModel name="bloodGroup" required />
+   
+        <label for="gender" >Gender:</label>
+        <select id="gender" ngModel name="gender" required>
+          <option value="">Select gender</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+   
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" value="1988-12-27" ngModel name="dateOfBirth"  required />
+   
+        <label for="medicalHistory">Medical History:</label>
+        <textarea id="medicalHistory" rows="4" placeholder="Enter any relevant history" ngModel name="medicalHistory" ></textarea>
+   
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" ngModel name="email"  required />
+   
+        <label for="contactDetails">Contact Details:</label>
+        <input type="text" id="contactDetails" placeholder="Phone number or address" ngModel name="contactDetails" required />
+   
+        <div class="buttons">
+          <button type="submit">Update Details</button>
+          <button type="reset" class="delete-btn">Delete Profile</button>
+        </div>
+      </form>
+    </div>
+  </body>
+--------------------------------------------------
+service code 
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -27,19 +69,19 @@ export class PatientService {
     return this.client.put(this.paths1,updatePat,{responseType:'text'})
   }
 
-  // public delete(deletePat:CPatient):Observable<string>{
-  //   console.log(deletePat)
-  //   return this.client.delete(this.paths2,deletePat,{responseType:'text'})
-  // }
-
-  public fetchById(fetchByIdPat:CPatient):Observable<string>{
-    console.log(fetchByIdPat)
-    return this.client.get(this.paths3,fetchByIdPat,{responseType:'text'})
+  public delete(deletePat:CPatient):Observable<string>{
+    console.log(deletePat)
+    return this.client.delete(this.paths2,deletePat,{responseType:'text'})
   }
 
-  public fetchAll(fetchAllPat:CPatient):Observable<string>{
-    console.log(fetchAllPat)
-    return this.client.get(this.paths4,fetchAllPat,{responseType:'text'})
+  public fetchById(fetchByIdPat:number):Observable<string>{
+    console.log(fetchByIdPat)
+    return this.client.get(this.paths3+"/"+fetchByIdPat,{responseType:'text'})
+  }
+
+  public fetchAll():Observable<Patient[]>{
+    console.log()
+    return this.client.get<Patient[]>(this.paths4);
   }
     
 }
@@ -94,257 +136,30 @@ export class CPatient{
 
   }
 }
---------------------------------------------------------
-<app-header></app-header>
+--------------------------------------
+component code
 
-<body>
-  <section class="profile-section">
-    <div class="profile-image">
-      <img src="./assets/userProfile.png" alt="Patient Profile">
-    </div>
-    <div class="profile-details">
-      <h2>{{ patient.name }}</h2>
-      <p><span class="label">Age:</span> {{ patient.age }}</p>
-      <p><span class="label">Blood Group:</span> {{ patient.bloodGroup }}</p>
-      <p><span class="label">Gender:</span> {{ patient.gender }}</p>
-      <p><span class="label">Date of Birth:</span> {{ patient.dateOfBirth }}</p>
-      <p><span class="label">Medical History:</span> {{ patient.medicalHistory }}</p>
-      <p><span class="label">Email:</span> {{ patient.email }}</p>
-      <p><span class="label">Contact:</span> {{ patient.contactDetails }}</p>
-    </div>
-  </section>
-
-  <main class="dashboard">
-    <div class="card">
-      <h1>📝</h1>
-      <h2>Update Profile</h2>
-      <button routerLink="/patientRegister">Edit Info</button>
-    </div>
-
-    <div class="card">
-      <h1>📆</h1>
-      <h2>Book Appointment</h2>
-      <button routerLink="/bookAppointment">Book Now</button>
-    </div>
-
-    <div class="card">
-      <h1>📑</h1>
-      <h2>Appointment Details</h2>
-      <button routerLink="/patientBooking">View Appointments</button>
-    </div>
-    
-    <div class="card">
-      <h1>🔔</h1>
-      <h2>Check Alerts</h2>
-      <button routerLink="/patientN">See Alerts</button>
-    </div>
-  </main>
-</body>
-------------------------------------------------------------------
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Poppins", sans-serif;
-}
-
-body {
-  padding-top: 30px;
-  min-height: 100vh;
-  color: #140e0e;
-  background-image: url('https://images.pexels.com/photos/6010792/pexels-photo-6010792.jpeg?cs=srgb&dl=pexels-tima-miroshnichenko-6010792.jpg&fm=jpg'); 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat; 
-  background-attachment: fixed; 
-}
-
-.profile-section {
-  background-color: rgba(225, 219, 219, 0.92);
-  padding: 20px;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 16px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  margin: 40px auto;
-  width: 90%;
-  max-width: 900px;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.profile-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 0 0 auto;
-}
-
-.profile-image img {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #1d3557;
-}
-
-.profile-details {
-  font-size: 17px;
-  padding: 5px 30px;
-  flex: 1;
-  min-width: 260px;
-  text-align: left;
-}
-
-.profile-details h2 {
-  font-size: 25px;
-  font-weight: bold;
-  color: #042046;
-  margin-bottom: 5px;
-}
-
-.profile-details p {
-  font-size: 18px;
-  margin-bottom: 10px;
-  line-height: 1.5;
-}
-
-.label {
-  font-weight: bold;
-  color: #457b9d;
-}
-
-.highlight {
-  font-weight: bold;
-  color: #e63946;
-}
-
-.dashboard {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 40px;
-  padding: 20px;
-  max-width: 90%;
-  margin: 0 auto;
-}
-
-.card {
-  background-color: rgba(225, 219, 219, 0.92);
-  border-radius: 10px;
-  padding: 25px;
-  text-align: center;
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card h1 {
-  font-size: 28px;
-  margin-bottom: 5px;
-}
-
-.card h2 {
-  font-size: 17px;
-  color: #1d3557;
-  margin-bottom: 10px;
-}
-
-.card button {
-  background-color: #39647e;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.card button:hover {
-  background-color: #1d3557;
-}
-
-/* Responsive Fixes */
-@media (max-width: 768px) {
-  .profile-section {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .profile-details {
-    text-align: center;
-    padding: 10px;
-  }
-
-  .dashboard {
-    grid-template-columns: 1fr;
-    width: 95%;
-  }
-
-  .profile-image img {
-    width: 150px;
-    height: 150px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card h1 {
-    font-size: 24px;
-  }
-
-  .card h2 {
-    font-size: 15px;
-  }
-
-  .card button {
-    font-size: 13px;
-    padding: 6px 12px;
-  }
-}
---------------------------------------------------------
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { HeaderComponent } from '../header/header.component';
-import { NgFor, NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Patient, PatientService } from '../patient.service';
+import { PatientService } from '../patient.service';
 
 @Component({
-  selector: 'app-patient',
-  imports: [RouterLink,HeaderComponent,NgIf,FormsModule,NgFor],
-  templateUrl: './patient.component.html',
-  styleUrl: './patient.component.css'
+  selector: 'patientUpdate',
+  imports: [RouterLink, FormsModule],
+  templateUrl: './patient-update.component.html',
+  styleUrl: './patient-update.component.css'
 })
-
-export class PatientComponent implements OnInit {
-  patients: Patient[] = [];
-  patient?: Patient; // single patient to display
-
-  constructor(private router: Router, private patientService: PatientService) {}
-
-  ngOnInit(): void {
-    this.loadAllPatients();
+export class PatientUpdateComponent {
+  constructor(private patientService: PatientService, private router: Router) { }
+  update(form: NgForm) {
+    this.patientService.update(form.value).subscribe(response => console.log(response))
+    alert("Patient Updated Succesfully")
+    this.router.navigate(['patient'])
   }
-
-  loadAllPatients(): void {
-    this.patientService.fetchAll().subscribe({
-      next: (data: Patient[]) => {
-        this.patients = data;
-        this.patient = data[0]; // display the first patient
-        console.log('Fetched all patients:', data);
-      },
-      error: (err) => {
-        console.error('Error fetching patients:', err);
-      }
-    });
-  }
-
-  navigateTo(route: string): void {
-    this.router.navigate([route]);
+  delete(form: NgForm) {
+    this.patientService.delete(form.value).subscribe(response => console.log(response))
+    alert("Patient Deleted Succesfully")
+    this.router.navigate(['patient'])
   }
 }
