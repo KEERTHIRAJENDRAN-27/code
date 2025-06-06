@@ -1,40 +1,51 @@
+like these change doctor code
 update this code for showing doctor details in profile section and also if once they register the details show button into update
-app-header></app-header>
+<app-header></app-header>
 
 <body>
-  <section class="profile-section" *ngIf="doctor">
+  <section class="profile-section">
     <div class="profile-image">
-      <img src="./assets/doctorProfile.png" alt="Doctor Profile">
+      <img src="./assets/userProfile.png" alt="Patient Profile">
     </div>
     <div class="profile-details">
-      <h2>{{ doctor?.doctorName }}</h2>
-      <p><span class="label">ID:</span> {{ doctor?.doctorId }}</p>
-      <p><span class="label">Specialty:</span> {{ doctor?.specialization }}</p>
-      <p><span class="label">Experience:</span> {{ doctor?.experience }} years</p>
-      <p><span class="label">Gender:</span> {{ doctor?.gender }}</p>
-      <p><span class="label">Days Available:</span> {{ doctor?.availableDays }}</p>
-      <p><span class="label">Consultation Time:</span> {{ doctor?.availableTime }}</p>
-      <p><span class="label">Email:</span> {{ doctor?.email }}</p>
-      <p><span class="label">Contact:</span> {{ doctor?.contact }}</p>
+      <h2>{{ patient?.name }}</h2>
+      <p><span class="label">Age:</span> {{ patient?.age }}</p>
+      <p><span class="label">Blood Group:</span> {{ patient?.bloodGroup }}</p>
+      <p><span class="label">Gender:</span> {{ patient?.gender }}</p>
+      <p><span class="label">Date of Birth:</span> {{ patient?.dateOfBirth }}</p>
+      <p><span class="label">Medical History:</span> {{ patient?.medicalHistory }}</p>
+      <p><span class="label">Email:</span> {{ patient?.email }}</p>
+      <p><span class="label">Contact:</span> {{ patient?.contactDetails }}</p>
+
     </div>
   </section>
 
   <main class="dashboard">
+    <!--  <div class="card">
+      <h1>📝</h1>
+      <h2>Update Profile</h2>
+        <button routerLink="/patientRegister">Register Info</button>
+      <button routerLink="/patientRegister">Update Info</button>
+    </div> -->
     <div class="card">
       <h1>📝</h1>
       <h2>Update Profile</h2>
-      <button *ngIf="doctor; else registerBtn" routerLink="/doctorProfileUpdate">
+
+      <button *ngIf="patient; else registerBtn" routerLink="/patientUpdate">
         Update Info
       </button>
+
       <ng-template #registerBtn>
-        <button routerLink="/doctorRegister">Register Info</button>
+        <button routerLink="/patientRegister">Register Info</button>
       </ng-template>
     </div>
 
+
+
     <div class="card">
-      <h1>📂</h1>
-      <h2>View Records</h2>
-      <button routerLink="/viewRecords">Patient History</button>
+      <h1>📆</h1>
+      <h2>Book Appointment</h2>
+      <button routerLink="/bookAppointment">Book Now</button>
     </div>
 
     <div class="card">
@@ -43,11 +54,18 @@ app-header></app-header>
       <button routerLink="/patientBooking">View Appointments</button>
     </div>
 
+    <!-- <div class="card">
+      <h1>🔔</h1>
+      <h2>Check Alerts</h2>
+      <button routerLink="/patientN">See Alerts</button>
+    </div> -->
+
     <div class="card">
       <h1>🔔</h1>
       <h2>Check Alerts</h2>
-      <button routerLink="/doctorN">View Mail</button>
+      <button routerLink="/patientN">View Mail</button>
     </div>
+
   </main>
 </body>
 
@@ -61,60 +79,95 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class DoctorService {
-  private paths = "http://localhost:8012/doctor/add";
-  private baseUrl = "http://localhost:8012/doctor";
+export class PatientService {
+  paths="http://localhost:8001/patients/register"
+  // paths1="http://localhost:8001/patients/update/{patientId}"
+  // paths2="http://localhost:8001/patients/delete/{patientId}"
+  // paths3="http://localhost:8001/patients/fetchById/{patientId}"
+  paths4="http://localhost:8001/patients/fetchAll"
 
-  constructor(private http: HttpClient) { }
 
-  public save(saveDoc: Doctor): Observable<string> {
-    console.log(saveDoc);
-    return this.http.post(this.paths, saveDoc, { responseType: 'text' });
+  constructor(private client:HttpClient) { }
+
+  public save(savePat:Patient):Observable<string>{
+    console.log(savePat)
+    return this.client.post(this.paths,savePat,{responseType:'text'})
   }
 
-  public update(doctorId: number, doctor: Doctor): Observable<string> {
-    return this.http.put(`${this.baseUrl}/update/${doctorId}`, doctor, { responseType: 'text' });
+  public update(updatePat: Patient): Observable<string> {
+    const url = `http://localhost:8001/patients/update/${updatePat.patientId}`;
+    return this.client.put(url, updatePat, { responseType: 'text' });
   }
   
-  public delete(doctorId: number): Observable<string> {
-    return this.http.delete(`${this.baseUrl}/delete/${doctorId}`, { responseType: 'text' });
+  public delete(deletePat: Patient): Observable<string> {
+    const url = `http://localhost:8001/patients/delete/${deletePat.patientId}`;
+    return this.client.delete(url, { responseType: 'text' });
+  }
+  
+  public fetchById(patientId: number): Observable<Patient> {
+    const url = `http://localhost:8001/patients/fetchById/${patientId}`;
+    return this.client.get<Patient>(url);
   }
   
 
-  public fetchById(doctorId: number): Observable<Doctor> {
-    const url = `${this.baseUrl}/fetch/${doctorId}`;
-    return this.http.get<Doctor>(url);
+  public fetchAll():Observable<Patient[]>{
+    console.log()
+    return this.client.get<Patient[]>(this.paths4);
   }
+    
+}
 
-  public fetchAll(): Observable<Doctor[]> {
-    return this.http.get<Doctor[]>(`${this.baseUrl}/fetchAll`);
+
+export class Patient{
+  patientId:number;
+  name:string;
+  age:number;
+  bloodGroup:string;
+  gender:string;
+  dateOfBirth:Date;
+  medicalHistory:string;
+  email:string;
+  contactDetails:string;
+
+  constructor(patientId:number , name:string, age:number,bloodGroup:string,gender:string,dateOfBirth:Date,medicalHistory:string,email:string,contactDetails:string){
+    this.patientId=patientId
+    this.name=name
+    this.age=age
+    this.bloodGroup=bloodGroup
+    this.gender=gender
+    this.dateOfBirth=dateOfBirth
+    this.medicalHistory=medicalHistory
+    this.email=email
+    this.contactDetails=contactDetails
+
   }
 }
 
-export class Doctor {
-  doctorId: number;
-  doctorName: string;
-  specialization: string;
-  gender: string;
-  availableDays: string;
-  availableTime: string;
-  email: string;
-  contact: string;
-  experience: number;
 
-  constructor(doctorId: number, doctorName: string, specialization: string, gender: string, availableDays: string,
-    availableTime: string, email: string, contact: string, experience: number) {
-    this.doctorId = doctorId;
-    this.doctorName = doctorName;
-    this.specialization = specialization;
-    this.gender = gender;
-    this.availableDays = availableDays;
-    this.availableTime = availableTime;
-    this.email = email;
-    this.contact = contact;
-    this.experience = experience;
+export class CPatient{
+  patientId:number;
+  name:string;
+  age:number;
+  bloodGroup:string;
+  gender:string;
+  dateOfBirth:Date;
+  medicalHistory:string;
+  email:string;
+  contactDetails:string;
+
+  constructor(name:string, age:number,bloodGroup:string,gender:string,dateOfBirth:Date,medicalHistory:string,email:string,contactDetails:string){
+    this.name=name
+    this.age=age
+    this.bloodGroup=bloodGroup
+    this.gender=gender
+    this.dateOfBirth=dateOfBirth
+    this.medicalHistory=medicalHistory
+    this.email=email
+    this.contactDetails=contactDetails
+
   }
 }
+
 
 --------------------------------------
 component code
@@ -122,47 +175,51 @@ component code
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
-import { Doctor, DoctorService } from '../doctor.service';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Patient, PatientService } from '../patient.service';
 
 @Component({
-  selector: 'app-doctor',
-  imports: [RouterLink,HeaderComponent],
-  templateUrl: './doctor.component.html',
-  styleUrl: './doctor.component.css'
+  selector: 'app-patient',
+  imports: [RouterLink,HeaderComponent,NgIf,FormsModule,NgFor],
+  templateUrl: './patient.component.html',
+  styleUrl: './patient.component.css'
 })
-export class DoctorComponent implements OnInit{
-  doctors: Doctor[] = [];
-  doctor?: Doctor;
-
-  constructor(private router: Router, private doctorService: DoctorService) {}
-
+export class PatientComponent implements OnInit {
+  patients: Patient[] = [];
+  patient?: Patient;
+ 
+  constructor(private router: Router, private patientService: PatientService) {}
+ 
   ngOnInit(): void {
-    this.loadAllDoctors();
+    this.loadAllPatients();
   }
-
-  loadAllDoctors(): void {
-    const userIdStr = localStorage.getItem("userId"); // Assuming doctorId is stored as userId
+ 
+  loadAllPatients(): void {
+    const userIdStr = localStorage.getItem("userId"); // Get from localStorage
     const userId = userIdStr ? parseInt(userIdStr, 10) : null;
-
-    this.doctorService.fetchAll().subscribe({
-      next: (data: Doctor[]) => {
-        this.doctors = data;
-
+   
+    this.patientService.fetchAll().subscribe({
+      next: (data: Patient[]) => {
+        this.patients = data;
+        
         if (userId !== null) {
-          this.doctor = data.find(d => d.doctorId === userId);
+          this.patient = data.find(p => p.patientId === userId);
         }
 
-        console.log('Fetched all doctors:', data);
-        console.log('Logged in doctor:', this.doctor);
+        console.log('Fetched all patients:', data);
+        console.log('Logged in patient:', this.patient);
       },
       error: (err) => {
-        console.error('Error fetching doctors:', err);
+        console.error('Error fetching patients:', err);
       }
     });
   }
 }
+
 ------------------------------------
 css code 
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -171,11 +228,10 @@ css code
 }
 
 body {
-  padding-top: 50px;
+  padding-top: 30px;
   min-height: 100vh;
   color: #140e0e;
-  /* background:rgba(202, 202, 202, 0.6); */
-  background-image: url('https://t3.ftcdn.net/jpg/03/11/86/42/360_F_311864233_WrzVI9w22XmJF2Hul4YQQCnCyBa5IeUe.jpg'); 
+  background-image: url('https://images.pexels.com/photos/6010792/pexels-photo-6010792.jpeg?cs=srgb&dl=pexels-tima-miroshnichenko-6010792.jpg&fm=jpg'); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat; 
@@ -184,15 +240,15 @@ body {
 
 .profile-section {
   background-color: rgba(225, 219, 219, 0.92);
-  padding: 30px;
+  padding: 20px;
   display: flex;
-  flex-direction: row-reverse; /* This puts the image on the right */
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
   border-radius: 16px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   margin: 40px auto;
-  width: 85%;
+  width: 90%;
   max-width: 900px;
   flex-wrap: wrap;
   gap: 20px;
@@ -202,21 +258,20 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 0 0 14px;
+  flex: 0 0 auto;
 }
 
 .profile-image img {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #1d3557;
 }
 
-
 .profile-details {
   font-size: 17px;
-  padding: 10px 30px;
+  padding: 5px 30px;
   flex: 1;
   min-width: 260px;
   text-align: left;
@@ -226,12 +281,12 @@ body {
   font-size: 25px;
   font-weight: bold;
   color: #042046;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .profile-details p {
   font-size: 18px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   line-height: 1.5;
 }
 
@@ -248,21 +303,19 @@ body {
 .dashboard {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 60px; /* Reduced spacing */
-  padding: 0px; /* Optimized padding */
-  max-width: 85%;
+  gap: 40px;
+  padding: 20px;
+  max-width: 90%;
   margin: 0 auto;
 }
 
 .card {
-  background-color:  rgba(225, 219, 219, 0.92);
+  background-color: rgba(225, 219, 219, 0.92);
   border-radius: 10px;
   padding: 25px;
   text-align: center;
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
-  min-height: auto; /* Optimized height */
-  margin-bottom: 10px;
 }
 
 .card:hover {
@@ -270,7 +323,7 @@ body {
 }
 
 .card h1 {
-  font-size: 32px;
+  font-size: 28px;
   margin-bottom: 5px;
 }
 
@@ -295,7 +348,7 @@ body {
   background-color: #1d3557;
 }
 
-/* Responsive Fix */
+/* Responsive Fixes */
 @media (max-width: 768px) {
   .profile-section {
     flex-direction: column;
@@ -304,10 +357,31 @@ body {
 
   .profile-details {
     text-align: center;
+    padding: 10px;
   }
 
   .dashboard {
     grid-template-columns: 1fr;
-    width: 90%;
+    width: 95%;
+  }
+
+  .profile-image img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card h1 {
+    font-size: 24px;
+  }
+
+  .card h2 {
+    font-size: 15px;
+  }
+
+  .card button {
+    font-size: 13px;
+    padding: 6px 12px;
   }
 }
