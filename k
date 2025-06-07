@@ -1,63 +1,118 @@
-this is my working service cod eso give view appointment booked details for doctor give simple delete function only doctor can view and delete the patient booked appoinmets 
-in that doctor view patient details who booked and resaon
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+in that every thing is working but its give all details show change that into
+if serach patient means give one card or profile section in that
+new patient means give empty doctors can update that info of medical histoy
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AppointmentService {
-  private baseUrl = 'http://localhost:8002/appointment';
- 
-  constructor(private client: HttpClient) {}
- 
-  save(data: any): Observable<any> {
-    return this.client.post(`${this.baseUrl}/save`, { appointment: data }, {
-      headers: { 'Content-Type': 'application/json' },
-      responseType: 'text' as 'json'
-    });
-  }
- 
-  getBookedAppointments(doctorId: number): Observable<any[]> {
-    return this.client.get<any[]>(`${this.baseUrl}/fetchByDoctorId/${doctorId}`);
-  }
-
-    getByPatientId(patientId: number): Observable<any> {
-    return this.client.get(`http://localhost:8002/appointment/fetchByPatientId/${patientId}`
-    ,{
-      headers:{
-        'Accept':'application/json'
-      }
-    });
-    }
-    // http://localhost:8002/appointment/fetchByPatientId/24
-
-    updateAppointment(data: any): Observable<any> {
-      return this.client.put(`${this.baseUrl}/update/${data.id}`, data, {
-          headers: { 'Content-Type': 'application/json' },
-          responseType: 'text' as 'json'
-        });
-      }
-     
-    deleteAppointment(id: number): Observable<any> {
-    return this.client.delete(`http://localhost:8002/appointment/delete/${id}`,{responseType:'text'as'json'});
-    }
+in that url they can view
+http://localhost:8004/medicalHistory/patienthistory/{patientId}
+{
+    "patient": {
+        "patientId": 5,
+        "name": "ram",
+        "age": 27,
+        "bloodGroup": "O+",
+        "gender": "Male",
+        "dateOfBirth": "2008-11-11",
+        "medicalHistory": "None",
+        "contactDetails": "9123789589",
+        "id": null
+    },
+    "medicalHistory": [
+        {
+            "historyId": 4,
+            "patientId": 5,
+            "diagnosis": "Hypertension",
+            "treatment": "Medication",
+            "dateOfVisit": "2025-05-14"
+        }
+    ]
 }
- 
 
-export class Appointment {
-  patientId: number;
-  doctorId: number;
-  appointmentDateTime: string;
-  reason: string;
-  status: string;
+<app-header></app-header>
 
-  constructor(patientId: number, doctorId: number, appointmentDateTime: string, reason: string, status: string) {
-    this.patientId = patientId;
-    this.doctorId = doctorId;
-    this.appointmentDateTime = appointmentDateTime;
-    this.reason = reason;
-    this.status = status;
+<div class="container">
+  <h2>View Medical History</h2>
+
+  <div class="search-section">
+    <input type="text" id="patientId" placeholder="Enter Patient ID" #patientInput />
+    <button (click)="loadHistory(patientInput.value)">Search</button>
+    <button (click)="loadAllHistories()">View All Records</button>
+  </div>
+
+  <div *ngIf="medicalHistory">
+    <h3>Medical History for Patient {{ medicalHistory.patientId }} 
+      <!-- - {{ medicalHistory.diagnosis }} - {{ medicalHistory.treatment }} - {{ medicalHistory.dateOfVisit }} -->
+    </h3>
+    <ul>
+      <li *ngFor="let record of medicalHistory">
+        {{ record.treatment }} - {{ record.diagnosis }}
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="allMedicalHistories && allMedicalHistories.length > 0">
+    <h3>All Medical Histories</h3>
+    <ul>
+      <li *ngFor="let patient of allMedicalHistories">
+        Patient ID: {{ patient.patientId }} -{{ patient.diagnosis }} - {{ patient.treatment }} - {{ patient.dateOfVisit }}</li>
+    </ul>
+  </div>
+
+  <div *ngIf="allMedicalHistories && allMedicalHistories.length === 0">
+    <p>No medical history records found.</p>
+  </div>
+</div>
+-------------------------------------------------------------------------------------
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MedicalHService } from '../medical-h.service';
+import { HeaderComponent } from '../header/header.component';
+
+@Component({
+  selector: 'app-doctor-vrecords',
+  standalone: true,  
+  imports: [RouterLink,HeaderComponent,CommonModule], 
+  templateUrl: './doctor-vrecords.component.html',
+  styleUrls: ['./doctor-vrecords.component.css']
+})
+export class DoctorVRecordsComponent {
+  medicalHistory: any;
+  allMedicalHistories: any;
+
+  constructor(private medicalService: MedicalHService) {}
+
+  loadHistory(patientId: string): void {
+    this.medicalHistory = undefined;  // Reset previous data
+    const idAsNumber = Number(patientId);
+    if (!isNaN(idAsNumber) && idAsNumber > 0) {
+      this.medicalService.getMedicalHistory(idAsNumber).subscribe({
+        // next: (data) => {
+        //   console.log('Fetched patient history:', data);
+        //   this.medicalHistory = data;
+        // },
+        next: (data) => {
+          console.log('API Response:', data);
+          this.medicalHistory = data;
+        },        
+        error: (err) => {
+          console.error('Error fetching records:', err);
+        }
+      });
+    } else {
+      console.error('Invalid Patient ID');
+    }
+  }
+  
+
+  //  Load all medical histories
+  loadAllHistories(): void {
+    this.medicalService.getAllMedicalHistories().subscribe({
+      next: (data) => {
+        this.allMedicalHistories = data;
+        console.log('Fetched all records:', data);
+      },
+      error: (err) => {
+        console.error('Error fetching all records:', err);
+      }
+    });
   }
 }
