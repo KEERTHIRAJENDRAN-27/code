@@ -1,4 +1,4 @@
-in that every thing is working but its give all details show change that into
+every thing is working but its give all details show change that into
 if serach patient means give one card or profile section in that
 new patient means give empty doctors can update that info of medical histoy
 
@@ -114,5 +114,36 @@ export class DoctorVRecordsComponent {
         console.error('Error fetching all records:', err);
       }
     });
+  }
+}
+------------------------------------------------------------------------------
+
+in this code dont change add this url
+
+http://localhost:8004/medicalHistory/patienthistory/{patientId}
+for viewing 
+ 
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class MedicalHService {
+  private baseUrl = 'http://localhost:8004/medicalHistory'; 
+
+  constructor(private http: HttpClient) {}
+
+  //  Fetch medical history by patient ID
+  getMedicalHistory(patientId: number): Observable<any> {
+    console.log(`Fetching history for patient ID: ${patientId}`);
+    return this.http.get(`${this.baseUrl}/patient/${patientId}`);
+  }
+
+  //  Fetch all medical records
+  getAllMedicalHistories(): Observable<any> {
+    console.log('Fetching all medical histories...');
+    return this.http.get(`${this.baseUrl}/all`);
   }
 }
