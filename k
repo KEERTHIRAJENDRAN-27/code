@@ -1,3 +1,4 @@
+wait i gave my ts code also update html css ts 
 this is the working delete html code but that error shown for 
 
 scheduleTask @ zone.js:2182
@@ -172,5 +173,94 @@ patient-appointments.component.ts:65  Reschedule failed HttpErrorResponse {head
     </div>
   </div>
 
+-----------------------------------------------------------------
+import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { AppointmentService } from '../appointment.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
+@Component({
+  selector: 'app-patient-appointments',
+  imports: [RouterLink,FormsModule,CommonModule],
+  templateUrl: './patient-appointments.component.html',
+  styleUrl: './patient-appointments.component.css'
+})
+export class PatientAppointmentsComponent implements OnInit{
+   
+    patientId = Number(localStorage.getItem("userId"));
+    // patientId = 24;
+    appointments: any[] = [];
+   
+    showModal = false;
+    selectedAppointmentId: number = 0;
+    rescheduleTime: string = '';
+   
+    constructor(private appointmentService: AppointmentService) {}
+   
+    ngOnInit(): void {
+      this.loadAppointments();
+    }
+   
+    loadAppointments() {
+      this.appointmentService.getByPatientId(this.patientId).subscribe({
+        next: (data) => this.appointments = data,
+        error: (err) => console.error('Error fetching appointments', err)
+      });
+    }
+   
+    editAppointment(appt: any) {
+      this.selectedAppointmentId = appt.appointment.id;
+      this.rescheduleTime = appt.appointment.appointmentDateTime;
+      this.showModal = true;
+    }
+   
+    showRescheduleForm = false;
+rescheduleData: any = {};
+ 
+openReschedule(appointment: any) {
+  this.rescheduleData = {
+    id: appointment.appointment.id,
+    patientId: appointment.appointment.patientId,
+    doctorId: appointment.appointment.doctorId,
+    appointmentDateTime: appointment.appointment.appointmentDateTime,
+    reason: appointment.appointment.reason,
+    status: appointment.appointment.status
+  };
+  this.showRescheduleForm = true;
+}
+ 
+submitReschedule() {
+  this.appointmentService.updateAppointment(this.rescheduleData).subscribe({
+    next: () => {
+      alert('Appointment rescheduled successfully');
+      this.loadAppointments();
+      this.showRescheduleForm = false;
+    },
+    error: err => {
+      console.error('Reschedule failed', err);
+      alert('Failed to reschedule appointment');
+    }
+  });
+}
+ 
+
+    cancelAppointment(id: number) {
+      if (confirm('Are you sure you want to cancel this appointment?')) {
+        this.appointmentService.deleteAppointment(id).subscribe({
+          next: () => {
+            alert('Appointment cancelled');
+            this.loadAppointments();
+          },
+          error: err => {
+            console.error('Delete error', err);
+            alert('Failed to cancel appointment');
+          }
+        });
+      }
+    }
+  
+  }
+   
+  
   
