@@ -1,4 +1,4 @@
-wait i gave my ts code also update html css ts 
+wait i gave my ts code also update this code  html css ts 
 this is the working delete html code but that error shown for 
 
 scheduleTask @ zone.js:2182
