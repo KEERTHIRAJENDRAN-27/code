@@ -7,6 +7,7 @@ dont give option like schedule resecdule cancel
 but in url iupdate and delte is done by using appointment id in database in backend also
 http://localhost:8002/appointment/update/{id}
 http://localhost:8002/appointment/delete/{id}
+http://localhost:8002/appointment/fetchByDoctorId/{doctorId}
 
 in backend i gave details for update so that u give details for frontend 
 {
@@ -114,5 +115,73 @@ export class Appointment {
     this.appointmentDateTime = appointmentDateTime;
     this.reason = reason;
     this.status = status;
+  }
+}
+----------------------------------------------------------------------------------
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DoctorService {
+  
+  private baseUrl = 'http://localhost:8012/doctor';
+
+  constructor(private http: HttpClient) {}
+
+  public save(doctor: Doctor): Observable<string> {
+    return this.http.post(`${this.baseUrl}/add`, doctor, { responseType: 'text' });
+  }
+
+  public update(doctor: Doctor): Observable<string> {
+    return this.http.put(`${this.baseUrl}/update/${doctor.doctorId}`, doctor, { responseType: 'text' });
+  }
+
+  public delete(doctor: Doctor): Observable<string> {
+    return this.http.delete(`${this.baseUrl}/delete/${doctor.doctorId}`, { responseType: 'text' });
+  }
+
+  public fetchById(doctorId: number): Observable<Doctor> {
+    return this.http.get<Doctor>(`${this.baseUrl}/fetch/${doctorId}`);
+  }
+
+  public fetchAll(): Observable<Doctor[]> {
+    return this.http.get<Doctor[]>(`${this.baseUrl}/fetchAll`);
+  }
+}
+
+export class Doctor {
+  doctorId: number;
+  doctorName: string;
+  specialization: string;
+  gender: string;
+  availableDays: string;
+  availableTime: string;
+  email: string;
+  contact: string;
+  experience: number;
+
+  constructor(
+    doctorId: number = 0,
+    doctorName: string = '',
+    specialization: string = '',
+    gender: string = '',
+    availableDays: string = '',
+    availableTime: string = '',
+    email: string = '',
+    contact: string = '',
+    experience: number = 0
+  ) {
+    this.doctorId = doctorId;
+    this.doctorName = doctorName;
+    this.specialization = specialization;
+    this.gender = gender;
+    this.availableDays = availableDays;
+    this.availableTime = availableTime;
+    this.email = email;
+    this.contact = contact;
+    this.experience = experience;
   }
 }
